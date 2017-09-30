@@ -1,0 +1,38 @@
+{
+  "name": "PersonsPhotos",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "PersonPhotoId": {
+      "type": "number",
+      "id": 1,
+      "required": true
+    },
+    "PersonId": {
+      "type": "number",
+      "required": true
+    },
+    "PhotoId": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "persons": {
+      "type": "belongsTo",
+      "model": "Persons",
+      "foreignKey": "PersonId"
+    },
+    "photos": {
+      "type": "belongsTo",
+      "model": "Photos",
+      "foreignKey": "PhotoId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

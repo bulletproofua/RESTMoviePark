@@ -1,0 +1,30 @@
+{
+  "name": "Genres",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "GenreId": {
+      "type": "number",
+      "id": 1,
+      "required": true
+    },
+    "GenreType": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "movies": {
+      "type": "hasMany",
+      "model": "Movies",
+      "foreignKey": "GenresId",
+      "through": "MoviesGenres"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

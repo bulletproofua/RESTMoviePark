@@ -1,0 +1,42 @@
+{
+  "name": "Roles",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "RoleId": {
+      "type": "number",
+      "id": 1,
+      "required": true
+    },
+    "MovieId": {
+      "type": "number",
+      "required": true
+    },
+    "PersonId": {
+      "type": "number",
+      "required": true
+    },
+    "RoleName": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "movies": {
+      "type": "belongsTo",
+      "model": "Movies",
+      "foreignKey": "MovieId"
+    },
+    "persons": {
+      "type": "belongsTo",
+      "model": "Persons",
+      "foreignKey": "PersonId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

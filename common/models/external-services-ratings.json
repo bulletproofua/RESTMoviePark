@@ -1,0 +1,42 @@
+{
+  "name": "ExternalServicesRatings",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "ExternalServiceRatingId": {
+      "type": "number",
+      "id": 1,
+      "required": true
+    },
+    "ExternalServiceId": {
+      "type": "number",
+      "required": true
+    },
+    "MovieId": {
+      "type": "number",
+      "required": true
+    },
+    "Rating": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "movies": {
+      "type": "belongsTo",
+      "model": "Movies",
+      "foreignKey": "MovieId"
+    },
+    "externalServices": {
+      "type": "belongsTo",
+      "model": "ExternalServices",
+      "foreignKey": "ExternalServiceId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

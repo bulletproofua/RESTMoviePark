@@ -1,0 +1,45 @@
+{
+  "name": "Photos",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "PhotoId": {
+      "type": "number",
+      "id": 1,
+      "required": true
+    },
+    "Link": {
+      "type": "string",
+      "required": true
+    },
+    "PhotoTypeId": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "persons": {
+      "type": "hasMany",
+      "model": "Persons",
+      "foreignKey": "PhotoId",
+      "through": "PersonsPhotos"
+    },
+    "photosTypes": {
+      "type": "hasOne",
+      "model": "PhotosTypes",
+      "foreignKey": "PhotoTypeId"
+    },
+    "photos": {
+      "type": "hasMany",
+      "model": "Photos",
+      "foreignKey": "PhotoId",
+      "through": "MoviesPhotos"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

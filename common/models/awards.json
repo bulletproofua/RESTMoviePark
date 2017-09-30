@@ -1,0 +1,49 @@
+{
+  "name": "Awards",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "AwardId": {
+      "type": "number",
+      "id": 1,
+      "required": true
+    },
+    "Title": {
+      "type": "string",
+      "required": true
+    },
+    "AwardTypeId": {
+      "type": "number",
+      "required": true
+    },
+    "AwardDate": {
+      "type": "date",
+      "required": true
+    },
+    "Site": {
+      "type": "string"
+    },
+    "PhotoId": {
+      "type": "number"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "nominationTypes": {
+      "type": "hasMany",
+      "model": "NominationTypes",
+      "foreignKey": "AwardId",
+      "through": "AwardNominations"
+    },
+    "awardTypes": {
+      "type": "hasOne",
+      "model": "AwardTypes",
+      "foreignKey": "AwardTypeId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

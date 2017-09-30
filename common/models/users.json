@@ -1,0 +1,48 @@
+{
+  "name": "Users",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "UserId": {
+      "type": "number",
+      "id": 1,
+      "required": true
+    },
+    "Age": {
+      "type": "number"
+    },
+    "Sex": {
+      "type": "string"
+    },
+    "PhotoId": {
+      "type": "string"
+    },
+    "StaffId": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "identityUsers": {
+      "type": "hasOne",
+      "model": "IdentityUsers",
+      "foreignKey": "UserId"
+    },
+    "staffs": {
+      "type": "hasOne",
+      "model": "Staff",
+      "foreignKey": "StaffId"
+    },
+    "photos": {
+      "type": "hasOne",
+      "model": "Photos",
+      "foreignKey": "PhotoId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

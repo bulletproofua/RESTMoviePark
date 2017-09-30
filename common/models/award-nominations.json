@@ -1,0 +1,38 @@
+{
+  "name": "AwardNominations",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "AwardNominationId": {
+      "type": "number",
+      "id": 1,
+      "required": true
+    },
+    "AwardId": {
+      "type": "number",
+      "required": true
+    },
+    "NominationTypeId": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "awards": {
+      "type": "belongsTo",
+      "model": "Awards",
+      "foreignKey": "AwardId"
+    },
+    "nominationTypes": {
+      "type": "belongsTo",
+      "model": "NominationTypes",
+      "foreignKey": "NominationTypeId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

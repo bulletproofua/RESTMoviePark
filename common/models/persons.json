@@ -1,0 +1,67 @@
+{
+  "name": "Persons",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "PersonId": {
+      "type": "number",
+      "id": 1,
+      "required": true
+    },
+    "FirstName": {
+      "type": "string",
+      "required": true
+    },
+    "LastName": {
+      "type": "string",
+      "required": true
+    },
+    "Birthday": {
+      "type": "date"
+    },
+    "CountryId": {
+      "type": "number"
+    },
+    "Description": {
+      "type": "string"
+    },
+    "PhotoId": {
+      "type": "number"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "movies": {
+      "type": "hasMany",
+      "model": "Movies",
+      "foreignKey": "PersonId",
+      "through": "MoviesPersons"
+    },
+    "photos": {
+      "type": "hasMany",
+      "model": "Photos",
+      "foreignKey": "PersonId",
+      "through": "PersonsPhotos"
+    },
+    "countries": {
+      "type": "hasOne",
+      "model": "Countries",
+      "foreignKey": "CountryId"
+    },
+    "roles": {
+      "type": "hasMany",
+      "model": "Roles",
+      "foreignKey": "PersonId"
+    },
+    "nominees": {
+      "type": "hasMany",
+      "model": "Nominees",
+      "foreignKey": "PersonId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

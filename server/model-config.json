@@ -1,0 +1,138 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins",
+      "../node_modules/@mean-expert/loopback-stats-mixin/dist",
+      "../node_modules/@mean-expert/loopback-component-realtime/dist/mixins",
+      "../node_modules/loopback-ds-timestamp-mixin"
+    ]
+  },
+  "User": {
+    "dataSource": "memory"
+  },
+  "AccessToken": {
+    "dataSource": "memory",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "memory",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "memory",
+    "public": false
+  },
+  "Role": {
+    "dataSource": "memory",
+    "public": false
+  },
+  "Movies": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "UsersMovies": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "ExternalServicesRatings": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "ExternalServices": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "MoviesGenres": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Genres": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "MoviesCountries": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "MoviesPersons": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "CrewRole": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Countries": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Persons": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "PersonsPhotos": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Photos": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "PhotosTypes": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "AwardTypes": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Awards": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "AwardNominations": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Roles": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "NominationTypes": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Nominees": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "IdentityUsers": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Users": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Staff": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "MoviesPhotos": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "aprioriAlgorithm": {
+    "dataSource": "memory",
+    "public": true
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "name": "Nominees",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "NomeneeId": {
+      "type": "number",
+      "id": 1,
+      "required": true
+    },
+    "AwardNominationId": {
+      "type": "number",
+      "required": true
+    },
+    "MovieId": {
+      "type": "number",
+      "required": true
+    },
+    "PersonId": {
+      "type": "number"
+    },
+    "RoleId": {
+      "type": "number"
+    },
+    "IsAwarded": {
+      "type": "boolean",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "persons": {
+      "type": "belongsTo",
+      "model": "Persons",
+      "foreignKey": "PersonId"
+    },
+    "movies": {
+      "type": "belongsTo",
+      "model": "Movies",
+      "foreignKey": "MovieId"
+    },
+    "roles": {
+      "type": "hasOne",
+      "model": "Roles",
+      "foreignKey": "RoleId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

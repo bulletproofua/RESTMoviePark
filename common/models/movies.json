@@ -1,0 +1,99 @@
+{
+  "name": "Movies",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "MovieId": {
+      "type": "number",
+      "id": 1,
+      "required": true
+    },
+    "Title": {
+      "type": "string",
+      "required": true
+    },
+    "Description": {
+      "type": "string"
+    },
+    "Length": {
+      "type": "number"
+    },
+    "Slogan": {
+      "type": "string"
+    },
+    "PremiereDate": {
+      "type": "date"
+    },
+    "RatingAgeLimit": {
+      "type": "string"
+    },
+    "Budget": {
+      "type": "number"
+    },
+    "Rating": {
+      "type": "number",
+      "required": true
+    },
+    "TotalViews": {
+      "type": "number",
+      "required": true
+    },
+    "TrailerLink": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "identityUsers": {
+      "type": "hasMany",
+      "model": "IdentityUsers",
+      "foreignKey": "MovieId",
+      "through": "UsersMovies"
+    },
+    "externalServices": {
+      "type": "hasMany",
+      "model": "ExternalServices",
+      "foreignKey": "MovieId",
+      "through": "ExternalServicesRatings"
+    },
+    "genres": {
+      "type": "hasMany",
+      "model": "Genres",
+      "foreignKey": "MovieId",
+      "through": "MoviesGenres"
+    },
+    "countries": {
+      "type": "hasMany",
+      "model": "Countries",
+      "foreignKey": "MovieId",
+      "through": "MoviesCountries"
+    },
+    "persons": {
+      "type": "hasMany",
+      "model": "Persons",
+      "foreignKey": "MovieId",
+      "through": "MoviesPersons"
+    },
+    "roles": {
+      "type": "hasMany",
+      "model": "Roles",
+      "foreignKey": "MovieId"
+    },
+    "nominees": {
+      "type": "hasMany",
+      "model": "Nominees",
+      "foreignKey": "MovieId"
+    },
+    "photos": {
+      "type": "hasMany",
+      "model": "Photos",
+      "foreignKey": "MovieId",
+      "through": "MoviesPhotos"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

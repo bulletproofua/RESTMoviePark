@@ -1,0 +1,42 @@
+{
+  "name": "UsersMovies",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "UserMovieId": {
+      "type": "number",
+      "id": 1,
+      "required": true
+    },
+    "UserId": {
+      "type": "number",
+      "required": true
+    },
+    "MovieId": {
+      "type": "number",
+      "required": true
+    },
+    "Rating": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "identityUsers": {
+      "type": "belongsTo",
+      "model": "IdentityUsers",
+      "foreignKey": "UserId"
+    },
+    "movies": {
+      "type": "belongsTo",
+      "model": "Movies",
+      "foreignKey": "MovieId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

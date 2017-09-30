@@ -1,0 +1,30 @@
+{
+  "name": "NominationTypes",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "NominationTypeId": {
+      "type": "number",
+      "id": 1,
+      "required": true
+    },
+    "NominationType": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "awards": {
+      "type": "hasMany",
+      "model": "Awards",
+      "foreignKey": "NominationTypeId",
+      "through": "AwardNominations"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

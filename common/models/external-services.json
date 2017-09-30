@@ -1,0 +1,42 @@
+{
+  "name": "ExternalServices",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "ExternalServiceId": {
+      "type": "number",
+      "id": 1,
+      "required": true
+    },
+    "ServiceName": {
+      "type": "string",
+      "required": true
+    },
+    "Link": {
+      "type": "string",
+      "required": true
+    },
+    "PhotoId": {
+      "type": "number"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "movies": {
+      "type": "hasMany",
+      "model": "Movies",
+      "foreignKey": "ExternalServiceId",
+      "through": "ExternalServicesRatings"
+    },
+    "photos": {
+      "type": "hasOne",
+      "model": "Photos",
+      "foreignKey": "PhotoId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

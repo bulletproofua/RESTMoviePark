@@ -1,0 +1,23 @@
+{
+  "name": "Staff",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "StaffId": {
+      "type": "number",
+      "id": 1,
+      "required": true
+    },
+    "StaffType": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
