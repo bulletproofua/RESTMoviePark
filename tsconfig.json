@@ -12,7 +12,11 @@
         ],
         "types": [
             "node",
-            "mocha"
+            "mocha",
+			      "loopback"
+        ],
+        "lib": [
+            "es2015"
         ]
     }
 }
