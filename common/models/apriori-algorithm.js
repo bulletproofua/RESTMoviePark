@@ -62,6 +62,18 @@ function contains(array, element){
   return false;
 }
 
+function getSupport(array, element){
+  
+    for (var i = 0; i < array.length; i++) {
+         if( _.isEqual(array[i].id, element)) {
+          return array[i].support;
+         }  
+    }
+    return null;
+}
+  
+
+
 function createPairs(itemSets){
   var arrOfCouple = [];
 
@@ -198,9 +210,88 @@ function getRepresentativeSets(sets) {
 
         representativeSets = representativeSets.concat(temp);
     }
+    return representativeSets;
+    // console.log("REPRES " , representativeSets);
 
-    console.log("REPRES " , representativeSets);
+}
 
+
+function getRules( representativeSets, frequentSets, CONFIDENCE){
+  var rules = [];
+
+  for (var k = 0; k < representativeSets.length; k++){
+      let s = representativeSets[k]; 
+      var fromList = [];
+      var toList = [];
+      var rulesList = [];
+      var from = [];
+      var to = [];
+      for (var i = 1; i < s.id.length; i++)
+      permutate(s.id, i, s.support);
+      
+      for (var q = 0; q < fromList.length; q++) {
+        rules.push(rulesList[q]);
+      }
+      return rules;
+
+      
+      function permutate(arr, limit, support) {
+        permuteIteration(arr, 0, limit, support);
+      }
+      
+      function permuteIteration(arr, index, limit, support) {
+        //последняя итерация
+        if (index >= limit) {
+      
+          for (var i = 0; i < limit; i++) from.push(arr[i]);
+          from.sort();
+          var includedInRules = false; // if A exists, A*** is skipped
+      
+          for (var i = 0; i < rulesList.length; i++) {
+            if (includes(from, rulesList[i].from)) {
+              includedInRules = true;
+              break;
+            }
+          }
+      
+          if (!contains(fromList, from) && !includedInRules) {
+            var fromSupport = getSupport(frequentSets, from);
+            var ruleConfidence = (support / fromSupport);
+            if (ruleConfidence >= CONFIDENCE) {
+              fromList.push(from);
+              for (var i = limit; i < arr.length; i++) {
+                to.push(arr[i]);
+              }
+              toList.push(to.sort());
+              rulesList.push({
+                from: from,
+                to: to,
+                supportFrom: fromSupport,
+                support: support,
+                confidence: ruleConfidence
+              });
+            }
+            to = [];
+          }
+          from = [];
+      
+          return;
+        }
+      
+        for (var i = index; i < arr.length; i++) {
+          var temp = arr[index];
+          arr[index] = arr[i];
+          arr[i] = temp;
+      
+          permuteIteration(arr, index + 1, limit, support);
+      
+          temp = arr[index];
+          arr[index] = arr[i];
+          arr[i] = temp;
+        }
+      }
+  } 
+  
 }
 //===================================================================================
 
@@ -214,7 +305,7 @@ function getRepresentativeSets(sets) {
   var representativeSets = [];
 
     var supArr = [];
-function Apriori(dataBaseTDB, support){
+function Apriori(dataBaseTDB, support, CONFIDENCE){
     var supData, filteredData;
     var dataWhithPairs =[];
     var minSupArr = [];
@@ -223,41 +314,30 @@ function Apriori(dataBaseTDB, support){
     var lastResult = [];
     var lastSet;
 
-    // var itemSet = [ ['A'], ['B'], ['C'], ['D'], ['E'] ];
-    // var finalData = [
-    //   ['A','C','D'],
-    //   ['B', 'C', 'E'],
-    //   ['A', 'B', 'C', 'E'],
-    //   ['B', 'E']
-    // ];
+    // itemSet = [ ['A'], ['B'], ['C'], ['D'], ['E'], ['F'], ['G']   ];
+    // finalData = [
+    //     ['A','C','D', 'F', 'G'],
+    //     ['A','B', 'C', 'D', 'F'],
+    //     ['C', 'D', 'E'],
+    //     ['A', 'D', 'F'],
+    //     ['A','C','D' , 'E', 'F'],
+    //     ['B', 'C', 'D', 'E', 'F', 'G']
+    // ]
 
-    itemSet = [ ['A'], ['B'], ['C'], ['D'], ['E'], ['F'], ['G']   ];
-    finalData = [
-        ['A','C','D', 'F', 'G'],
-        ['A','B', 'C', 'D', 'F'],
-        ['C', 'D', 'E'],
-        ['A', 'D', 'F'],
-        ['A','C','D' , 'E', 'F'],
-        ['B', 'C', 'D', 'E', 'F', 'G']
-    ]
+    for(var key in myData){
+        for (var i = 0 ; i < myData[key].length; i++) {
+          var elementOfMyData = [ Number(myData[key][i].id )];
+          if(!contains(itemSet , elementOfMyData )){
+            itemSet.push( elementOfMyData );
+          }
+        }
+    }
+    
+    itemSet.sort(function(a,b){
+      return a - b ;
+    });
 
-    // for(var key in myData){
-    //     for (var i = 0 ; i < myData[key].length; i++) {
-    //       var elementOfMyData = [ Number(myData[key][i].id )];
-    //       if(!contains(itemSet , elementOfMyData )){
-    //         itemSet.push( elementOfMyData );
-    //       }
-    //     }
-    // }
-    //
-    // itemSet.sort(function(a,b){
-    //   return a - b ;
-    // });
-    // console.log('ITEMSET ', itemSet)
-    // console.log("-----------------------")
-
-  // finalData = getOnlyIds(myData);
-  // console.log('FINALDATA', finalData)
+  finalData = getOnlyIds(myData);
 
   while (true) {
       supData = countSupport(finalData, itemSet);
@@ -273,15 +353,15 @@ function Apriori(dataBaseTDB, support){
 
       if (itemSet.length == 0) break;
     }
+      var representativeSets = getRepresentativeSets(frequentSets);
 
-      getRepresentativeSets(frequentSets);
-    return lastResult;
+      var rules = getRules(representativeSets, frequentSets, CONFIDENCE);
+      console.log(rules);
+    return rules;
 }
 
 
-var aprioriResult = Apriori(myData, 3);
-// console.log('supArr ======> \n', _.flatten(supArr));
-// console.log('APRIORIRESULT', aprioriResult)
+var aprioriResult = Apriori(myData, 3, 0.75);
 
 
   Apriorialgorithm.remoteMethod( 'Apriorialgorithm', {
