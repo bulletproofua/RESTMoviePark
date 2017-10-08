@@ -134,5 +134,9 @@
   "aprioriAlgorithm": {
     "dataSource": "memory",
     "public": true
+  },
+  "collaborativeFiltering": {
+    "dataSource": "memory",
+    "public": true
   }
 }

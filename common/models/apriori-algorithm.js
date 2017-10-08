@@ -1,7 +1,6 @@
 'use strict';
 var data = require( "../../server/boot/data.json" );
 var _ = require( 'underscore' );
-var Mingo = require('mingo');
 var Backbone = require('backbone');
 
 module.exports = function( Apriorialgorithm ) {
@@ -356,7 +355,7 @@ function Apriori(dataBaseTDB, support, CONFIDENCE){
       var representativeSets = getRepresentativeSets(frequentSets);
 
       var rules = getRules(representativeSets, frequentSets, CONFIDENCE);
-      console.log(rules);
+      // console.log(rules);
     return rules;
 }
 
