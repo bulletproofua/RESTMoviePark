@@ -5,6 +5,39 @@ var Backbone = require('backbone');
 
 module.exports = function(Collaborativefiltering) {
     
+    Collaborativefiltering.Collaborativefiltering = function(currentUserId, cb){
+
+        var filter = {};
+        Collaborativefiltering.app.models.Movies.find( function(err, result){
+            if (err) {
+                console.log(err);
+                return cb(err);
+            } else {
+                console.log( result );
+                return cb(null, result);
+            }
+        });
+    }
+
+    Collaborativefiltering.remoteMethod("Collaborativefiltering", {
+		description: " ",
+		accepts: [{
+           arg: "currentUserId", type: "string",
+           required: true
+        }],
+		http: {
+			path: "/Collaborativefiltering",
+			verb: "get"
+		},
+		returns: {
+			// arg: "MingoResult ",
+			// type: "array",
+			root: true
+		}
+	});
+
+
+
     var myData = data;
     var itemSet =[];
     var currentUserId = 'userson1';
@@ -55,10 +88,10 @@ module.exports = function(Collaborativefiltering) {
         totalSumA += Math.pow(currentUser.Ratings[id], 2);
     }
 
-    console.log(totalSumA);
+    // console.log(totalSumA);
 
     totalSumA = Math.sqrt(totalSumA);
-    console.log(totalSumA);
+    // console.log(totalSumA);
 
     var totalSim = 0;
     var keys = [];
@@ -84,7 +117,7 @@ module.exports = function(Collaborativefiltering) {
         // console.log(sum);
 
         var similarity = sum / (totalSumA * totalSumB);
-        console.log("similarity", similarity); // відібрати собі юзерів хічічччічі
+        // console.log("similarity", similarity); // відібрати собі юзерів хічічччічі
 
         if (similarity > 0.1){
             
@@ -118,6 +151,6 @@ module.exports = function(Collaborativefiltering) {
         return b[1] - a[1];
     });
 
-    console.log(predictionSort);
+    // console.log(predictionSort);
     
 };

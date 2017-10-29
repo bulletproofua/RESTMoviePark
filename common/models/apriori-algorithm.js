@@ -5,6 +5,40 @@ var Backbone = require('backbone');
 
 module.exports = function( Apriorialgorithm ) {
 
+  Apriorialgorithm.AprioriAlgorithm = function(support, confidence, cb){ 
+        var filter = {};
+        Apriorialgorithm.app.models.Movies.find( function(err, result){
+            if (err) {
+                console.log(err);
+                return cb(err);
+            } else {
+                console.log( result );
+                return cb(null, result);
+            }
+        });
+    }
+
+    Apriorialgorithm.remoteMethod("AprioriAlgorithm", {
+      description: " ",
+      accepts: [{
+            arg: "support", type: "string",
+            required: true
+        }, {
+          arg: "confidence", type: "string",
+          required: true
+        }],
+      http: {
+        path: "/AprioriAlgorithm",
+        verb: "get"
+      },
+      returns: {
+        // arg: "MingoResult ",
+        // type: "array",
+        root: true
+      }
+    });
+
+
 function getOnlyIds(data){
     var result = [];
 
@@ -70,8 +104,6 @@ function getSupport(array, element){
     }
     return null;
 }
-  
-
 
 function createPairs(itemSets){
   var arrOfCouple = [];
@@ -362,22 +394,4 @@ function Apriori(dataBaseTDB, support, CONFIDENCE){
 
 var aprioriResult = Apriori(myData, 3, 0.75);
 
-
-  Apriorialgorithm.remoteMethod( 'Apriorialgorithm', {
-    description: "Return data",
-    // isStatic: false,
-    // accepts:{
-    //    arg: "id",
-    //    type:"number",
-    //    required:true
-    // },
-    http: {
-      path: '/:id/Apriorialgorithm',
-      verb: 'get'
-    },
-    returns: {
-      arg: 'aprioriResult',
-      type: 'array'
-    }
-  } );
 };

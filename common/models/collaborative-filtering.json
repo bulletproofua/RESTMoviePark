@@ -1,16 +1,11 @@
 {
   "name": "collaborativeFiltering",
-  "base": "PersistedModel",
+  "base": "Model",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
-  "properties": {
-    "id": {
-      "type": "number",
-      "required": true
-    }
-  },
+  "properties": { },
   "validations": [],
   "relations": {},
   "acls": [],

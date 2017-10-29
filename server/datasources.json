@@ -4,11 +4,11 @@
     "connector": "memory"
   },
   "mysql": {
-    "host": "localhost",
+    "host": "127.0.0.1",
     "port": 3306,
     "url": "",
-    "database": "MoviePark",
-    "password": "root",
+    "database": "moviepark",
+    "password": "1111",
     "name": "mysql",
     "user": "root",
     "connector": "mysql"
