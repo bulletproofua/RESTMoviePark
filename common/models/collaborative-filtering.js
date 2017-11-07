@@ -4,6 +4,7 @@ var _ = require( 'underscore' );
 var Backbone = require('backbone');
 
 module.exports = function(Collaborativefiltering) {   
+    var qu = 3;
 
     function similarity( currentUserId, result, target ) {
         var data =  JSON.stringify(result);
@@ -179,6 +180,8 @@ module.exports = function(Collaborativefiltering) {
     
 
     Collaborativefiltering.similarity = function(currentUserId, cb){
+        console.log("_____________-----------------------------------------------");
+        var res ;
         var filter = { 
             include: [{
                     relation: "movies", 
@@ -194,16 +197,34 @@ module.exports = function(Collaborativefiltering) {
                fields:["UserId","MovieId", "Rating" ],
                order: 'UserId ASC',
             }
+        // cb(null, 2 );
+        // if (typeof cb !== 'function') {
+        //    console.log("aaaaaaaaaaaaaa")
+        //    return 2;
+        // } else {
+        //     cb(null, 2 );
+        // }
 
         Collaborativefiltering.app.models.UsersMovies.find(filter, function(err, result){
             if (err) {
                 console.log(err);
-                return cb(err);
+                cb(err);
             } else {
-                var res = similarity(currentUserId, result, "AR");
-                return cb(null, res);
+                res = similarity(currentUserId, result, "AR");
+                // console.log(res);
+                // return res;
+                // console.log(res);
+                if (typeof cb !== 'function') {
+                    console.log("aaaaaaaaaaaaaa", res);
+                    return res;
+                 } else {
+                     cb(null, res );
+                 }
+                // cb(null, res);
             }
+          
         })
+        
     }
 
     Collaborativefiltering.remoteMethod("similarity", {
@@ -217,6 +238,8 @@ module.exports = function(Collaborativefiltering) {
 			verb: "get"
 		},
 		returns: {
+            arg: "data",
+            type: "object",
 			root: true
 		}
     });

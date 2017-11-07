@@ -1,21 +1,66 @@
 'use strict';
+var app = require('../../server/server');
 var data = require( "../../server/boot/data.json" );
 var _ = require( 'underscore' );
 var Backbone = require('backbone');
+var async = require("async");
+// var CF = require("./collaborative-filtering");
 
 module.exports = function( Apriorialgorithm ) {
 
   Apriorialgorithm.AprioriAlgorithm = function(support, confidence, cb){ 
-        var filter = {};
-        Apriorialgorithm.app.models.Movies.find( function(err, result){
-            if (err) {
-                console.log(err);
-                return cb(err);
-            } else {
-                console.log( result );
-                return cb(null, result);
-            }
-        });
+    var currentUserId = 1;
+    var CF = Apriorialgorithm.app.models.collaborativeFiltering;
+
+    // CF.similarity();
+
+    var filter = { 
+      include: [{
+              relation: "movies", 
+                  scope: {
+                      fields: ["MovieId", "Title"]
+                  }
+              },{
+              relation:"identityUsers", 
+                  scope:{
+                      fields:["UserId","UserName"]
+                  }
+              }], 
+         fields:["UserId","MovieId", "Rating" ],
+         order: 'UserId ASC',
+      }
+
+      var res = CF.similarity(currentUserId);
+
+      console.log("------", res);
+
+      cb(null, res);
+  //   Apriorialgorithm.app.models.UsersMovies.find(filter, function(err, result){
+  //     if (err) {
+  //         console.log(err);
+  //         return cb(err);
+  //     } else {
+  //         // var res = 2;
+  //         var res = CF.similarity(currentUserId);
+  //         // var a = CF.similarity();
+  //         // console.log("res =-> ", res);
+  //         return cb(null, res);
+  //     }
+  // })
+
+    // console.log("a ===> ", CF);
+        // var filter = {};
+        // Apriorialgorithm.app.models.Movies.find( filter, function(err, result){
+        //     if (err) {
+        //         console.log(err);
+        //         return cb(err);
+        //     } else {
+        //         var data =  JSON.stringify(result);
+        //         result = JSON.parse(data);
+
+        //         return cb(null, result);
+        //     }
+        // });
     }
 
     Apriorialgorithm.remoteMethod("AprioriAlgorithm", {
@@ -32,8 +77,8 @@ module.exports = function( Apriorialgorithm ) {
         verb: "get"
       },
       returns: {
-        // arg: "MingoResult ",
-        // type: "array",
+        arg: "data ",
+        type: "object",
         root: true
       }
     });
@@ -336,6 +381,7 @@ function getRules( representativeSets, frequentSets, CONFIDENCE){
   var representativeSets = [];
 
     var supArr = [];
+
 function Apriori(dataBaseTDB, support, CONFIDENCE){
     var supData, filteredData;
     var dataWhithPairs =[];
@@ -369,6 +415,8 @@ function Apriori(dataBaseTDB, support, CONFIDENCE){
     });
 
   finalData = getOnlyIds(myData);
+  console.log("myData _>", myData);
+  // console.log("finalData _>", finalData);
 
   while (true) {
       supData = countSupport(finalData, itemSet);
