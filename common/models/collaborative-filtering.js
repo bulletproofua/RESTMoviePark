@@ -4,8 +4,6 @@ var _ = require( 'underscore' );
 var Backbone = require('backbone');
 
 module.exports = function(Collaborativefiltering) {   
-    var qu = 3;
-
     function similarity( currentUserId, result, target ) {
         var data =  JSON.stringify(result);
         result = JSON.parse(data);
@@ -76,15 +74,7 @@ module.exports = function(Collaborativefiltering) {
             }
     
             var similarity = sum / (totalSumA * totalSumB);
-
-            var userObj = {
-                UserID: user.UserID,
-                UserName: user.UserName,
-                similarity: similarity
-
-            }
-            usersInfoForAR.push(userObj);
-            
+           
             if (similarity > 0.1){
                 
                 totalSim += similarity;
@@ -111,7 +101,7 @@ module.exports = function(Collaborativefiltering) {
         }, this);
 
         if( target == 'AR') {
-            return { usersInfoForAR: usersInfoForAR };
+            return usersInfoForAR;
         } else {
             return  { prediction: prediction, totalSim: totalSim };
         }
@@ -180,7 +170,6 @@ module.exports = function(Collaborativefiltering) {
     
 
     Collaborativefiltering.similarity = function(currentUserId, cb){
-        console.log("_____________-----------------------------------------------");
         var res ;
         var filter = { 
             include: [{
@@ -197,30 +186,13 @@ module.exports = function(Collaborativefiltering) {
                fields:["UserId","MovieId", "Rating" ],
                order: 'UserId ASC',
             }
-        // cb(null, 2 );
-        // if (typeof cb !== 'function') {
-        //    console.log("aaaaaaaaaaaaaa")
-        //    return 2;
-        // } else {
-        //     cb(null, 2 );
-        // }
 
         Collaborativefiltering.app.models.UsersMovies.find(filter, function(err, result){
             if (err) {
-                console.log(err);
-                cb(err);
+                return cb(err);
             } else {
                 res = similarity(currentUserId, result, "AR");
-                // console.log(res);
-                // return res;
-                // console.log(res);
-                if (typeof cb !== 'function') {
-                    console.log("aaaaaaaaaaaaaa", res);
-                    return res;
-                 } else {
-                     cb(null, res );
-                 }
-                // cb(null, res);
+                return cb(null, res);
             }
           
         })

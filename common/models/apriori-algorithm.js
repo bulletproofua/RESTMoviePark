@@ -4,15 +4,102 @@ var data = require( "../../server/boot/data.json" );
 var _ = require( 'underscore' );
 var Backbone = require('backbone');
 var async = require("async");
-// var CF = require("./collaborative-filtering");
+
 
 module.exports = function( Apriorialgorithm ) {
 
-  Apriorialgorithm.AprioriAlgorithm = function(support, confidence, cb){ 
-    var currentUserId = 1;
-    var CF = Apriorialgorithm.app.models.collaborativeFiltering;
+  var frequentSets = [];
+  var notFrequentSets = [];
+  var representativeSets = [];
+  function AprioriAlgorithm (filter, support, confidence, cb){
+    
+    Apriorialgorithm.app.models.UsersMovies.find(filter, function(err, result){
+      if (err) {
+        return cb(err);
+      } else {       
+        var data =  JSON.stringify(result);
+        result = JSON.parse(data);
+        // need one more iteration
+        result.push({
+            "UserId": -1,
+            "identityUsers": {
+            "UserId": -1,
+            "UserName": "Last"
+            }
+        });
 
-    // CF.similarity();
+        var userNames = [];
+        var currentUser;
+        var User = '';
+        var allUsers = [];          
+        var prevUserId = '';
+        var usersInfoForAR = [];
+        var finalData = [];
+        var itemSet = [];
+        var elements = [];
+
+        result.forEach(function(i) {
+            if( i.identityUsers.UserId != prevUserId ) {
+                if( User !== '') {
+                  allUsers.push(User);
+                } 
+                if( i.identityUsers.UserName === "Last") {
+                  return; 
+                } 
+                prevUserId = i.identityUsers.UserId;
+                userNames.push(i.identityUsers.UserName);
+                User = { 
+                    UserID: i.UserId,
+                    UserName: i.identityUsers.UserName,
+                    Ratings: []
+                };                
+            }
+            User.Ratings.push(i.MovieId);
+        }, this);
+        
+        allUsers.forEach(function( data){
+          finalData.push(data.Ratings);
+        });
+
+        finalData.forEach(function(data){
+          elements =  _.union(elements, data);
+        });
+        
+        elements.sort(function(a,b){
+          return a - b ;
+        });
+        
+        elements.forEach(function( data ){
+          var el = [data];
+          itemSet.push(el);
+        })
+
+        var supData, filteredData;
+        var lastResult = [];
+
+        while (true) {
+          supData = countSupport(finalData, itemSet);
+
+          filteredData = supCountFilter(supData, support);
+    
+          lastResult = filteredData;
+    
+          frequentSets = frequentSets.concat(filteredData);
+          notFrequentSets = notFrequentSets.concat(minSupportArr(supData, support));
+    
+          itemSet = createPairs(filteredData);
+    
+          if (itemSet.length == 0) break;
+        }
+          var representativeSets = getRepresentativeSets(frequentSets);
+    
+          var rules = getRules(representativeSets, frequentSets, confidence);
+          console.log(rules);
+          cb( null, rules)
+      }        
+    });
+  }
+  Apriorialgorithm.AprioriAlgorithm = function(currentUserId, support, confidence, cb){ 
 
     var filter = { 
       include: [{
@@ -30,42 +117,18 @@ module.exports = function( Apriorialgorithm ) {
          order: 'UserId ASC',
       }
 
-      var res = CF.similarity(currentUserId);
-
-      console.log("------", res);
-
-      cb(null, res);
-  //   Apriorialgorithm.app.models.UsersMovies.find(filter, function(err, result){
-  //     if (err) {
-  //         console.log(err);
-  //         return cb(err);
-  //     } else {
-  //         // var res = 2;
-  //         var res = CF.similarity(currentUserId);
-  //         // var a = CF.similarity();
-  //         // console.log("res =-> ", res);
-  //         return cb(null, res);
-  //     }
-  // })
-
-    // console.log("a ===> ", CF);
-        // var filter = {};
-        // Apriorialgorithm.app.models.Movies.find( filter, function(err, result){
-        //     if (err) {
-        //         console.log(err);
-        //         return cb(err);
-        //     } else {
-        //         var data =  JSON.stringify(result);
-        //         result = JSON.parse(data);
-
-        //         return cb(null, result);
-        //     }
-        // });
-    }
+    AprioriAlgorithm( filter, support, confidence, function(err, res){
+        cb(null, res );
+    });
+  }
 
     Apriorialgorithm.remoteMethod("AprioriAlgorithm", {
       description: " ",
-      accepts: [{
+      accepts: [
+        {
+          arg: "currentUserId", type: "string",
+          required: true
+        },{
             arg: "support", type: "string",
             required: true
         }, {
@@ -77,7 +140,73 @@ module.exports = function( Apriorialgorithm ) {
         verb: "get"
       },
       returns: {
-        arg: "data ",
+        arg: "data",
+        type: "object",
+        root: true
+      }
+    });
+
+
+    Apriorialgorithm.ApriorialgorithmAndCollaborativefiltering = function( currentUserId, support, confidence, cb ){
+
+      var CF = Apriorialgorithm.app.models.collaborativeFiltering;
+
+        CF.similarity(currentUserId, function(err, result){
+          if(err) {
+            return cb(err);
+          } else {
+            var similarityUsers = [];
+            result.forEach(function(data){
+              similarityUsers.push(data.UserID);
+            });  
+
+            var filter = { 
+              include: [{
+                      relation: "movies", 
+                          scope: {
+                              fields: ["MovieId", "Title"]
+                          }
+                      },{
+                      relation:"identityUsers", 
+                          scope:{
+                              fields:["UserId","UserName"]
+                          }
+                      }], 
+                fields:["UserId","MovieId", "Rating" ],
+                where:{ "UserId": {inq: similarityUsers} },
+                order: 'UserId ASC',
+              }  
+
+            AprioriAlgorithm( filter, support, confidence, function(err, res){
+              if(err) {
+                return cb(err);
+              } else {
+                cb(null, res );
+              }
+            });
+          }            
+        });
+    }
+
+    Apriorialgorithm.remoteMethod("ApriorialgorithmAndCollaborativefiltering", {
+      description: " ",
+      accepts: [
+        {
+          arg: "currentUserId", type: "string",
+          required: true
+        },{
+            arg: "support", type: "string",
+            required: true
+        }, {
+          arg: "confidence", type: "string",
+          required: true
+        }],
+      http: {
+        path: "/ApriorialgorithmAndCollaborativefiltering",
+        verb: "get"
+      },
+      returns: {
+        arg: "data",
         type: "object",
         root: true
       }
@@ -182,11 +311,7 @@ function createItemSet(itemSet1, itemSet2){
     })
 
     if( uniqueElements.length == itemSet1.length+1){
-      return uniqueElements.sort(
-            //   function(a, b) {
-            //   return a - b;
-            // }
-          );
+      return uniqueElements
     } else {
       return null;
     }
@@ -230,13 +355,12 @@ function deleteMinSupElements (arrWithPairs, arrWithMinSup) {
         }
       }
     }
-
     return itemSet;
 };
 
 function areSubsetsFrequent(pair){
 
-    var include = true;
+  var include = true;
 
     for(var i = 0; i < notFrequentSets.length; i++){
         if (includes(pair, notFrequentSets[i])) {
@@ -246,8 +370,6 @@ function areSubsetsFrequent(pair){
     }
     return include;
 }
-
-
 
 function min(a, b) {
   return a < b ? a : b;
@@ -281,14 +403,12 @@ function getRepresentativeSets(sets) {
         }
 
         if (!included) {
-                    temp = temp.concat(sets[i]);
+          temp = temp.concat(sets[i]);
         }
 
         representativeSets = representativeSets.concat(temp);
     }
     return representativeSets;
-    // console.log("REPRES " , representativeSets);
-
 }
 
 
@@ -309,19 +429,17 @@ function getRules( representativeSets, frequentSets, CONFIDENCE){
         rules.push(rulesList[q]);
       }
       return rules;
-
       
       function permutate(arr, limit, support) {
         permuteIteration(arr, 0, limit, support);
       }
       
       function permuteIteration(arr, index, limit, support) {
-        //последняя итерация
         if (index >= limit) {
       
           for (var i = 0; i < limit; i++) from.push(arr[i]);
           from.sort();
-          var includedInRules = false; // if A exists, A*** is skipped
+          var includedInRules = false;
       
           for (var i = 0; i < rulesList.length; i++) {
             if (includes(from, rulesList[i].from)) {
@@ -349,8 +467,7 @@ function getRules( representativeSets, frequentSets, CONFIDENCE){
             }
             to = [];
           }
-          from = [];
-      
+          from = [];      
           return;
         }
       
@@ -369,77 +486,73 @@ function getRules( representativeSets, frequentSets, CONFIDENCE){
   } 
   
 }
-//===================================================================================
+//========================= Тести з файлика==========================================================
 
+  // var myData = data;
+  // var frequentSets = [];
+  // var notFrequentSets = [];
+  // var representativeSets = [];
+  // var supArr = [];
 
+// function Apriori(dataBaseTDB, support, CONFIDENCE){
+//     var supData, filteredData;
+//     var dataWhithPairs =[];
+//     var minSupArr = [];
+//     var finalData;
+//     var itemSet =[];
+//     var lastResult = [];
+//     var lastSet;
 
-  // початковий набір даних ( з бд )
-  var myData = data;
-  // console.log('MYDATA', myData)
-  var frequentSets = [];
-  var notFrequentSets = [];
-  var representativeSets = [];
+//     // itemSet = [ ['A'], ['B'], ['C'], ['D'], ['E'], ['F'], ['G']   ];
+//     // finalData = [
+//     //     ['A','C','D', 'F', 'G'],
+//     //     ['A','B', 'C', 'D', 'F'],
+//     //     ['C', 'D', 'E'],
+//     //     ['A', 'D', 'F'],
+//     //     ['A','C','D' , 'E', 'F'],
+//     //     ['B', 'C', 'D', 'E', 'F', 'G']
+//     // ]
 
-    var supArr = [];
-
-function Apriori(dataBaseTDB, support, CONFIDENCE){
-    var supData, filteredData;
-    var dataWhithPairs =[];
-    var minSupArr = [];
-    var finalData;
-    var itemSet =[];
-    var lastResult = [];
-    var lastSet;
-
-    // itemSet = [ ['A'], ['B'], ['C'], ['D'], ['E'], ['F'], ['G']   ];
-    // finalData = [
-    //     ['A','C','D', 'F', 'G'],
-    //     ['A','B', 'C', 'D', 'F'],
-    //     ['C', 'D', 'E'],
-    //     ['A', 'D', 'F'],
-    //     ['A','C','D' , 'E', 'F'],
-    //     ['B', 'C', 'D', 'E', 'F', 'G']
-    // ]
-
-    for(var key in myData){
-        for (var i = 0 ; i < myData[key].length; i++) {
-          var elementOfMyData = [ Number(myData[key][i].id )];
-          if(!contains(itemSet , elementOfMyData )){
-            itemSet.push( elementOfMyData );
-          }
-        }
-    }
+//     for(var key in myData){
+//         for (var i = 0 ; i < myData[key].length; i++) {
+//           var elementOfMyData = [ Number(myData[key][i].id )];
+//           if(!contains(itemSet , elementOfMyData )){
+//             itemSet.push( elementOfMyData );
+//           }
+//         }
+//     }
     
-    itemSet.sort(function(a,b){
-      return a - b ;
-    });
+//     itemSet.sort(function(a,b){
+//       return a - b ;
+//     });
 
-  finalData = getOnlyIds(myData);
-  console.log("myData _>", myData);
-  // console.log("finalData _>", finalData);
+//     console.log('itemSet 2 ===> ', itemSet)
 
-  while (true) {
-      supData = countSupport(finalData, itemSet);
+//   finalData = getOnlyIds(myData);
+//   // console.log("myData _>", myData);
+//   // console.log("finalData _>", finalData);
 
-      filteredData = supCountFilter(supData, support);
+//   while (true) {
+//       supData = countSupport(finalData, itemSet);
 
-      lastResult = filteredData;
+//       filteredData = supCountFilter(supData, support);
 
-      frequentSets = frequentSets.concat(filteredData);
-      notFrequentSets = notFrequentSets.concat(minSupportArr(supData, support));
+//       lastResult = filteredData;
 
-      itemSet = createPairs(filteredData);
+//       frequentSets = frequentSets.concat(filteredData);
+//       notFrequentSets = notFrequentSets.concat(minSupportArr(supData, support));
 
-      if (itemSet.length == 0) break;
-    }
-      var representativeSets = getRepresentativeSets(frequentSets);
+//       itemSet = createPairs(filteredData);
 
-      var rules = getRules(representativeSets, frequentSets, CONFIDENCE);
-      // console.log(rules);
-    return rules;
-}
+//       if (itemSet.length == 0) break;
+//     }
+//       var representativeSets = getRepresentativeSets(frequentSets);
 
+//       var rules = getRules(representativeSets, frequentSets, CONFIDENCE);
+//       // console.log(rules);
+//     return rules;
+// }
 
-var aprioriResult = Apriori(myData, 3, 0.75);
+// var aprioriResult = Apriori(myData, 3, 0.75);
 
 };
