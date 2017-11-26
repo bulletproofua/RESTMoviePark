@@ -6,7 +6,7 @@
     "validateUpsert": true
   },
   "properties": {
-    "MoviePhotoId": {
+    "MoviesPhotosId": {
       "type": "number",
       "id": 1,
       "required": true
