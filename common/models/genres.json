@@ -8,8 +8,7 @@
   "properties": {
     "GenreId": {
       "type": "number",
-      "id": 1,
-      "required": true
+      "id": 1
     },
     "GenreType": {
       "type": "string",

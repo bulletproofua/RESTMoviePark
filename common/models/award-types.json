@@ -8,8 +8,7 @@
   "properties": {
     "AwardTypeId": {
       "type": "number",
-      "id": 1,
-      "required": true
+      "id": 1
     },
     "AwardType": {
       "type": "number",

@@ -12,6 +12,8 @@ module.exports = function( Apriorialgorithm ) {
   var notFrequentSets = [];
   var representativeSets = [];
   function AprioriAlgorithm (filter, support, confidence, cb){
+    console.log('confidence', confidence)
+    console.log('support', support)
     
     Apriorialgorithm.app.models.UsersMovies.find(filter, function(err, result){
       if (err) {

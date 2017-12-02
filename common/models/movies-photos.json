@@ -8,8 +8,7 @@
   "properties": {
     "MoviesPhotosId": {
       "type": "number",
-      "id": 1,
-      "required": true
+      "id": true
     },
     "MovieId": {
       "type": "number",

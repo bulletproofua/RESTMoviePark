@@ -8,8 +8,7 @@
   "properties": {
     "PersonId": {
       "type": "number",
-      "id": 1,
-      "required": true
+      "id": 1
     },
     "FirstName": {
       "type": "string",

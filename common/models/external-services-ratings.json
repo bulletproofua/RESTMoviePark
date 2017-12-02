@@ -8,8 +8,7 @@
   "properties": {
     "ExternalServiceRatingId": {
       "type": "number",
-      "id": 1,
-      "required": true
+      "id": 1
     },
     "ExternalServiceId": {
       "type": "number",

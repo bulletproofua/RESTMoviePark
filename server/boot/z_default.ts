@@ -5,8 +5,8 @@ function setDefaults(server:any, next: any) {
 		});
 		await server.models.User.create({
 			username: 'admin',
-			password: 'admin',
-			email: 'admin@bar.com',
+			password: "admin",
+			email: "admin@bar.com",
 		});
 		await server.models.RoleMapping.create({
 			roleId: '1',

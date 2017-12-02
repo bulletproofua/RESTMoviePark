@@ -8,8 +8,7 @@
   "properties": {
     "AwardNominationId": {
       "type": "number",
-      "id": 1,
-      "required": true
+      "id": 1
     },
     "AwardId": {
       "type": "number",
