@@ -46,6 +46,11 @@
   },
   "validations": [],
   "relations": {
+    "UsersMovies":{
+      "type": "hasMany",
+      "foreignKey": "MovieId",
+      "model": "UsersMovies"
+    },
     "identityUsers": {
       "type": "hasMany",
       "model": "IdentityUsers",
