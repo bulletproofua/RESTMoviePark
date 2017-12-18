@@ -28,6 +28,31 @@ function setDefaults(server:any, next: any) {
 			password: "admin5",
 			email: "admin5@bar.com",
 		});
+        await server.models.User.create({
+			username: 'admin6',
+			password: "admin6",
+			email: "admin6@bar.com",
+		});
+        await server.models.User.create({
+			username: 'admin7',
+			password: "admin7",
+			email: "admin7@bar.com",
+		});
+        await server.models.User.create({
+			username: 'admin8',
+			password: "admin8",
+			email: "admin8@bar.com",
+		});
+        await server.models.User.create({
+			username: 'admin9',
+			password: "admin9",
+			email: "admin9@bar.com",
+		});
+             await server.models.User.create({
+			username: 'admin10',
+			password: "admin10",
+			email: "admin10@bar.com",
+		});
 		await server.models.RoleMapping.create({
 			roleId: '1',
 			principalId: '1',
