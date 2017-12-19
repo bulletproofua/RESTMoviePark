@@ -74,8 +74,10 @@ module.exports = function(Collaborativefiltering) {
             }
     
             var similarity = sum / (totalSumA * totalSumB);
+
            
-            if (similarity > 0.1){
+            console.log(" --- >similarity")
+            if (similarity > 0.3){
                 
                 totalSim += similarity;
     
@@ -88,15 +90,18 @@ module.exports = function(Collaborativefiltering) {
                         keys.push(id);
                     }
                 }
+                
+                var userObj = {
+                    UserID: user.UserID,
+                    UserName: user.UserName,
+                    similarity: similarity
+    
+                }
+                usersInfoForAR.push(userObj);            
+                console.log(' \n usersInfoForAR', usersInfoForAR)
             }
-            
-            var userObj = {
-                UserID: user.UserID,
-                UserName: user.UserName,
-                similarity: similarity
 
-            }
-            usersInfoForAR.push(userObj);            
+            
     
         }, this);
 
@@ -219,119 +224,119 @@ module.exports = function(Collaborativefiltering) {
 
 
 // TEST 
-    function usersRatings (id){   
-        var currentUserRatings = {};
-        for (var i = 0; i < id.length; i++) {
-            var key = id[i].id;
-            var val = id[i].rating    
-            currentUserRatings[key] = val;   
-        }
-        return currentUserRatings;
-    }    
+    // function usersRatings (id){   
+    //     var currentUserRatings = {};
+    //     for (var i = 0; i < id.length; i++) {
+    //         var key = id[i].id;
+    //         var val = id[i].rating    
+    //         currentUserRatings[key] = val;   
+    //     }
+    //     return currentUserRatings;
+    // }    
     
-    var myData = data;
-    var itemSet =[];
-    var currentUserId = 'userson1';
-            var currentUser = {};
+    // var myData = data;
+    // var itemSet =[];
+    // var currentUserId = 'userson1';
+    //         var currentUser = {};
         
         
-            var allUsers = [];
-            var userNames = []
-            var index = 0;
-            for(var i in myData){
-                // console.log("index", index);
-                userNames.push(i);
-                if( i != currentUserId){
+    //         var allUsers = [];
+    //         var userNames = []
+    //         var index = 0;
+    //         for(var i in myData){
+    //             // console.log("index", index);
+    //             userNames.push(i);
+    //             if( i != currentUserId){
                     
-                    var rating = usersRatings(myData[i]);
-                    var o = {
-                        UserID: index,
-                        UserName: i,
-                        Ratings: rating
-                       }
-                       allUsers.push(o);  
-                       index++; 
-                } else {
-                    var rating = usersRatings(myData[i]);
-                    currentUser = {
-                        UserID: index,
-                        UserName: i,
-                        Ratings: rating
-                       }
-                       index++; 
-                }
-            }
+    //                 var rating = usersRatings(myData[i]);
+    //                 var o = {
+    //                     UserID: index,
+    //                     UserName: i,
+    //                     Ratings: rating
+    //                    }
+    //                    allUsers.push(o);  
+    //                    index++; 
+    //             } else {
+    //                 var rating = usersRatings(myData[i]);
+    //                 currentUser = {
+    //                     UserID: index,
+    //                     UserName: i,
+    //                     Ratings: rating
+    //                    }
+    //                    index++; 
+    //             }
+    //         }
         
-            // console.log(currentUser);
-            var totalSumA = 0;
+    //         // console.log(currentUser);
+    //         var totalSumA = 0;
         
-            for( var id in currentUser.Ratings){
-                // console.log(id , currentUser.Ratings[id])
-                totalSumA += Math.pow(currentUser.Ratings[id], 2);
-            }
+    //         for( var id in currentUser.Ratings){
+    //             // console.log(id , currentUser.Ratings[id])
+    //             totalSumA += Math.pow(currentUser.Ratings[id], 2);
+    //         }
         
-            // console.log(totalSumA);
+    //         // console.log(totalSumA);
         
-            totalSumA = Math.sqrt(totalSumA);
-            // console.log(totalSumA);
+    //         totalSumA = Math.sqrt(totalSumA);
+    //         // console.log(totalSumA);
         
-            var totalSim = 0;
-            var keys = [];
-            var prediction = { };
+    //         var totalSim = 0;
+    //         var keys = [];
+    //         var prediction = { };
         
-            allUsers.forEach(function(user) {
-                // console.log(user);
-                var totalSumB = 0;
+    //         allUsers.forEach(function(user) {
+    //             // console.log(user);
+    //             var totalSumB = 0;
                 
-                for( var id in user.Ratings){
-                    totalSumB += Math.pow(user.Ratings[id], 2);
-                }
-                // console.log(totalSumB);
-                totalSumB = Math.sqrt(totalSumB);
+    //             for( var id in user.Ratings){
+    //                 totalSumB += Math.pow(user.Ratings[id], 2);
+    //             }
+    //             // console.log(totalSumB);
+    //             totalSumB = Math.sqrt(totalSumB);
                 
-                var sum = 0;
+    //             var sum = 0;
         
-                for( var id in currentUser.Ratings){
-                    if (id in user.Ratings) {
-                        sum += currentUser.Ratings[id] * user.Ratings[id];
-                    }
-                }
-                // console.log(sum);
+    //             for( var id in currentUser.Ratings){
+    //                 if (id in user.Ratings) {
+    //                     sum += currentUser.Ratings[id] * user.Ratings[id];
+    //                 }
+    //             }
+    //             // console.log(sum);
         
-                var similarity = sum / (totalSumA * totalSumB);
-                // console.log("similarity", similarity); // відібрати собі юзерів хічічччічі
+    //             var similarity = sum / (totalSumA * totalSumB);
+    //             console.log("!!!!similarity", similarity);
                 
-                if (similarity > 0.1){
+    //             if (similarity > 0.32){
                     
-                    totalSim += similarity;
+    //                 totalSim += similarity;
         
-                    for (var id in user.Ratings) {
-                        var predValue = user.Ratings[id] * similarity;
-                        if ( id in prediction) {
-                            prediction[id] += predValue;                    
-                        } else if (!(id in currentUser.Ratings)) {
-                            prediction[id] = predValue;
-                            keys.push(id);
-                        }
-                    }
-                }
+    //                 for (var id in user.Ratings) {
+    //                     var predValue = user.Ratings[id] * similarity;
+    //                     if ( id in prediction) {
+    //                         prediction[id] += predValue;                    
+    //                     } else if (!(id in currentUser.Ratings)) {
+    //                         prediction[id] = predValue;
+    //                         keys.push(id);
+    //                     }
+    //                 }
+    //             }
         
-            }, this);
+    //         }, this);
         
-            for (var id in prediction) {
-                prediction[id] /= totalSim;
-            }
+    //         for (var id in prediction) {
+    //             prediction[id] /= totalSim;
+    //         }
         
-            var predictionSort = [];
-            for (var id in prediction) {
-                if(prediction[id] > 5 ){
-                    predictionSort.push([id, prediction[id]]);
-                }
-            }
+    //         var predictionSort = [];
+    //         for (var id in prediction) {
+    //             if(prediction[id] > 5 ){
+    //                 predictionSort.push([id, prediction[id]]);
+    //             }
+    //         }
             
-            predictionSort.sort(function(a, b) {
-                return b[1] - a[1];
-            });
+    //         predictionSort.sort(function(a, b) {
+    //             return b[1] - a[1];
+    //         });
         
             // console.log(predictionSort);
     
