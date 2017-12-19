@@ -5,21 +5,28 @@ var _ = require( 'underscore' );
 var Backbone = require('backbone');
 var async = require("async");
 
-
 module.exports = function( Apriorialgorithm ) {
-
+  var a =0 , b=0, c=0;
   var frequentSets = [];
   var notFrequentSets = [];
   var representativeSets = [];
+  
   function AprioriAlgorithm (filter, support, confidence, cb){
+    a = 0;
+    a = new Date();
     console.log('confidence', confidence)
     console.log('support', support)
     
+    frequentSets = [];
+    notFrequentSets = [];
+    representativeSets = [];
+
     Apriorialgorithm.app.models.UsersMovies.find(filter, function(err, result){
       if (err) {
         return cb(err);
-      } else {       
-        var data =  JSON.stringify(result);
+      } else {    
+        var data = 0;   
+        data =  JSON.stringify(result);
         result = JSON.parse(data);
         // need one more iteration
         result.push({
@@ -76,7 +83,7 @@ module.exports = function( Apriorialgorithm ) {
           itemSet.push(el);
         })
 
-        var supData, filteredData;
+        var supData = [], filteredData = [];
         var lastResult = [];
 
         while (true) {
@@ -90,12 +97,18 @@ module.exports = function( Apriorialgorithm ) {
           notFrequentSets = notFrequentSets.concat(minSupportArr(supData, support));
     
           itemSet = createPairs(filteredData);
+          // console.log('itemSet', itemSet)
     
           if (itemSet.length == 0) break;
         }
           var representativeSets = getRepresentativeSets(frequentSets);
     
           var rules = getRules(representativeSets, frequentSets, confidence);
+
+          b = 0;
+          b = new Date()
+          
+          console.log(" APRIORI ---->", b-a);
           console.log(rules);
           cb( null, rules)
       }        
@@ -150,16 +163,19 @@ module.exports = function( Apriorialgorithm ) {
 
 
     Apriorialgorithm.ApriorialgorithmAndCollaborativefiltering = function( currentUserId, support, confidence, cb ){
-
+      c = 0;
+      c = new Date();
       var CF = Apriorialgorithm.app.models.collaborativeFiltering;
 
         CF.similarity(currentUserId, function(err, result){
           if(err) {
             return cb(err);
           } else {
+            console.log('result', result)
             var similarityUsers = [];
             result.forEach(function(data){
               similarityUsers.push(data.UserID);
+              console.log('similarityUsers', similarityUsers)
             });  
 
             var filter = { 
@@ -183,6 +199,9 @@ module.exports = function( Apriorialgorithm ) {
               if(err) {
                 return cb(err);
               } else {
+                var d = 0;
+                d = new Date();
+                console.log(" APRIORIandCF---->", d-c);
                 cb(null, res );
               }
             });
