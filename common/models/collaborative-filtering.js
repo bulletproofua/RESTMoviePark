@@ -76,7 +76,7 @@ module.exports = function(Collaborativefiltering) {
             var similarity = sum / (totalSumA * totalSumB);
 
            
-            console.log(" --- >similarity")
+            // console.log(" --- >similarity")
             if (similarity > 0.3){
                 
                 totalSim += similarity;
@@ -98,7 +98,7 @@ module.exports = function(Collaborativefiltering) {
     
                 }
                 usersInfoForAR.push(userObj);            
-                console.log(' \n usersInfoForAR', usersInfoForAR)
+                // console.log(' \n usersInfoForAR', usersInfoForAR)
             }
 
             

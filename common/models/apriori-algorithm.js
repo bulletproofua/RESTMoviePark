@@ -88,8 +88,10 @@ module.exports = function( Apriorialgorithm ) {
 
         while (true) {
           supData = countSupport(finalData, itemSet);
+          // console.log('supData', supData)
 
           filteredData = supCountFilter(supData, support);
+          // console.log('filteredData', filteredData)
     
           lastResult = filteredData;
     
@@ -108,8 +110,8 @@ module.exports = function( Apriorialgorithm ) {
           b = 0;
           b = new Date()
           
-          console.log(" APRIORI ---->", b-a);
-          console.log(rules);
+          console.log(" \n APRIORI ---->", b-a);
+          // console.log(rules);
           cb( null, rules)
       }        
     });
@@ -171,11 +173,11 @@ module.exports = function( Apriorialgorithm ) {
           if(err) {
             return cb(err);
           } else {
-            console.log('result', result)
+            // console.log('result', result)
             var similarityUsers = [];
             result.forEach(function(data){
               similarityUsers.push(data.UserID);
-              console.log('similarityUsers', similarityUsers)
+              // console.log('similarityUsers', similarityUsers)
             });  
 
             var filter = { 

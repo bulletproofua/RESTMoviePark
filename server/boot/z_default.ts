@@ -6,52 +6,52 @@ function setDefaults(server:any, next: any) {
 		await server.models.User.create({
 			username: 'admin',
 			password: "admin",
-			email: "admin@bar.com",
+			email: "admin@gmail.com",
 		});
 		await server.models.User.create({
-			username: 'admin2',
-			password: "admin2",
-			email: "admin2@bar.com",
+			username: 'BulletproofUA',
+			password: "BulletproofUA",
+			email: "BulletproofUA@gmail.com",
 		});
 		await server.models.User.create({
-			username: 'admin3',
-			password: "admin3",
-			email: "admin3@bar.com",
+			username: 'lawliet',
+			password: "lawliet",
+			email: "lawliet@gmail.com",
 		});
 		await server.models.User.create({
-			username: 'admin4',
-			password: "admin4",
-			email: "admin4@bar.com",
+			username: 'Desertroper',
+			password: "Desertroper",
+			email: "Desertroper@gmail.com",
 		});
 		await server.models.User.create({
-			username: 'admin5',
-			password: "admin5",
-			email: "admin5@bar.com",
+			username: 'Jason Statham',
+			password: "jason_statham",
+			email: "jason_statham@gmail.com",
 		});
         await server.models.User.create({
-			username: 'admin6',
-			password: "admin6",
-			email: "admin6@bar.com",
+			username: 'Welf_Crozzo',
+			password: "Welf_Crozzo",
+			email: "Welf_Crozzo@gmail.com",
 		});
         await server.models.User.create({
-			username: 'admin7',
-			password: "admin7",
-			email: "admin7@bar.com",
+			username: 'Aqua',
+			password: "Aqua",
+			email: "Aqua@gmail.com",
 		});
         await server.models.User.create({
-			username: 'admin8',
-			password: "admin8",
-			email: "admin8@bar.com",
+			username: 'Kirua',
+			password: "Kirua",
+			email: "Kirua@gmail.com",
 		});
         await server.models.User.create({
-			username: 'admin9',
-			password: "admin9",
-			email: "admin9@bar.com",
+			username: 'Milky_Way',
+			password: "Milky_Way",
+			email: "Milky_Way@gmail.com",
 		});
              await server.models.User.create({
-			username: 'admin10',
-			password: "admin10",
-			email: "admin10@bar.com",
+			username: 'StillHard',
+			password: "StillHard",
+			email: "StillHard@gmail.com",
 		});
 		await server.models.RoleMapping.create({
 			roleId: '1',
