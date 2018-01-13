@@ -14,19 +14,19 @@ function setDefaults(server:any, next: any) {
 			email: "BulletproofUA@gmail.com",
 		});
 		await server.models.User.create({
-			username: 'lawliet',
-			password: "lawliet",
-			email: "lawliet@gmail.com",
+			username: 'Jason Statham',
+			password: "jason_statham",
+			email: "jason_statham@gmail.com",
 		});
 		await server.models.User.create({
 			username: 'Desertroper',
 			password: "Desertroper",
 			email: "Desertroper@gmail.com",
-		});
+		});		
 		await server.models.User.create({
-			username: 'Jason Statham',
-			password: "jason_statham",
-			email: "jason_statham@gmail.com",
+			username: 'lawliet',
+			password: "lawliet",
+			email: "lawliet@gmail.com",
 		});
         await server.models.User.create({
 			username: 'Welf_Crozzo',
